@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { toast } from "react-toastify";
+import Button from "../components/Button";
 
 const SignUp = () => {
   const [formData, setFormdata] = useState({
@@ -22,6 +23,10 @@ const SignUp = () => {
   async function handleSubmit(e) {
     e.preventDefault();
 
+    const { username, email, password } = formData;
+
+    if (!username || !email || !password) return;
+
     try {
       setIsLoading(true);
       // setError(null);
@@ -41,7 +46,7 @@ const SignUp = () => {
       // setError(error.message);
 
       toast(error.message);
-      console.error(error);
+      // console.error(error);
     } finally {
       setIsLoading(false);
     }
@@ -52,33 +57,43 @@ const SignUp = () => {
       <div className="px-4 w-full">
         <h1 className="text-3xl font-semibold text-center uppercase mb-10 ">Sign Up</h1>
 
-        <form className="flex flex-col gap-y-5 max-w-3xl mx-auto mb-4" onSubmit={handleSubmit}>
+        <form className="flex flex-col gap-y-5 max-w-3xl mx-auto" onSubmit={handleSubmit}>
           <input type="text" placeholder="Username" id="username" className="bg-gray-300 p-3 rounded-lg focus:outline-none" value={formData.username} onChange={handleChange} />
 
           <input type="email" placeholder="Email" id="email" className="bg-gray-300 p-3 rounded-lg focus:outline-none" value={formData.email} onChange={handleChange} />
 
           <input type="password" placeholder="Password" id="password" className="bg-gray-300 p-3 rounded-lg focus:outline-none" value={formData.password} onChange={handleChange} />
 
-          <button disabled={isLoading} className="bg-blue-600 px-5 py-3 rounded-lg text-white font-medium uppercase cursor-pointer hover:bg-blue-300 disabled:opacity-80">
+          {/* <button disabled={isLoading} className="bg-blue-600 px-5 py-3 rounded-lg text-white font-medium uppercase cursor-pointer hover:bg-blue-300 disabled:opacity-80">
             {isLoading ? "Creating user..." : "Sign Up"}
-          </button>
+          </button> */}
 
-          <hr className="text-gray-300" />
-
-          <button className="w-full flex items-center justify-center gap-x-5 mx-auto px-5 py-3 border-1 rounded-lg text-gray-500 font-medium uppercase cursor-pointer hover:bg-gray-800 hover:text-white disabled:opacity-80">
-            <img className="w-5" src="/google.png" />
-            Continue with google
-          </button>
+          <Button btnBg="bg-blue-600" hoverBg="bg-gray-800" hoverText="text-white">
+            {isLoading ? "Creating user..." : "Sign Up"}
+          </Button>
         </form>
 
-        <p className="flex gap-x-2 text-sm justify-center">
-          Have an account?
-          <span>
-            <NavLink to="/sign-in" className="text-blue-600">
-              Sign in
-            </NavLink>
-          </span>
-        </p>
+        <div className="max-w-3xl mx-auto">
+          <hr className="text-gray-300 my-4" />
+
+          {/* <button className="w-full flex items-center justify-center gap-x-3 mx-auto px-5 py-3 border-1 rounded-lg text-gray-500 font-medium uppercase cursor-pointer hover:bg-gray-800 hover:text-white disabled:opacity-80">
+            <img className="w-5" src="/google.png" />
+            Continue with google
+          </button> */}
+
+          <Button btnColor="text-gray-500" iconUrl="/google.png" hoverBg="bg-gray-800" hoverText="text-white">
+            Continue with google
+          </Button>
+
+          <p className="flex gap-x-2 text-sm justify-center mt-4">
+            Have an account?
+            <span>
+              <NavLink to="/sign-in" className="text-blue-600">
+                Sign in
+              </NavLink>
+            </span>
+          </p>
+        </div>
       </div>
     </section>
   );

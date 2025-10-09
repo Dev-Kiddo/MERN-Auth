@@ -1,6 +1,7 @@
 import userModel from "../models/userModel.js";
-import bcryptjs from "bcryptjs";
+import bcryptjs, { compare } from "bcryptjs";
 import { customErrHandler } from "../utils/error.js";
+import jwt from "jsonwebtoken";
 
 // To use our default err handeling in this controller we need to pass the next function here has a third parameter
 export const signUp = async (req, res, next) => {
@@ -15,7 +16,6 @@ export const signUp = async (req, res, next) => {
   }
 
   const [existingUser] = await userModel.find({ username, email });
-  // console.log("existingUser:", existingUser);
 
   if (existingUser) {
     return res.status(500).json({
@@ -28,7 +28,6 @@ export const signUp = async (req, res, next) => {
     const hashPasssword = await bcryptjs.hash(password, 10);
 
     const newUser = new userModel({ username, email, password: hashPasssword });
-    // console.log("newUser:", newUser);
 
     await newUser.save();
 
@@ -47,8 +46,57 @@ export const signUp = async (req, res, next) => {
 
     // Here we are using our default err handeling middleware
     return next(error);
+  }
+};
 
-    // Default Err handeling with Custom Err
-    // return next(customErrHandler(405, "Somthing happens"));
+export const signIn = async (req, res, next) => {
+  const { email, password } = req.body;
+
+  // console.log(email, password);
+
+  if (!email || !password) {
+    // return res.status(500).json({
+    //   success: false,
+    //   message: "To sign-in, All fields required",
+    // });
+
+    return next(customErrHandler(500, "To sign-in, All fields required"));
+  }
+
+  try {
+    // lean(), Documents returned from queries with lean option enabled are plain javascript objects
+    const user = await userModel.findOne({ email }).lean();
+
+    console.log("user:", user);
+
+    if (!user) {
+      // return res.status(500).json({
+      //   success: false,
+      //   message: "User not found, please sign up first...",
+      // });
+
+      // Err handeling with Custom Error
+      return next(customErrHandler(401, "User not found, please sign up first..."));
+    }
+
+    const encryptPassword = await bcryptjs.compare(password, user.password);
+
+    if (!encryptPassword) return next(customErrHandler(401, "Wrong Credentials, Please try again"));
+
+    const { password: hashedpassword, ...userDetails } = user;
+
+    console.log("userDetails:", userDetails);
+
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "7h" });
+
+    res.cookie("access_token", token, { maxAge: 7000 * 60 * 60, httpOnly: true });
+
+    res.status(201).json({
+      success: true,
+      message: "Log in successfully",
+      data: userDetails,
+    });
+  } catch (error) {
+    next(error);
   }
 };
