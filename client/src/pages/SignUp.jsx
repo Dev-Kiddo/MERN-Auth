@@ -1,20 +1,67 @@
-import React from "react";
+import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const SignUp = () => {
+  const [formData, setFormdata] = useState({
+    username: "",
+    email: "",
+    password: "",
+  });
+  const [isLoading, setIsLoading] = useState(false);
+  // const [error, setError] = useState(null);
+
+  function handleChange(e) {
+    setFormdata((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+  }
+
+  function handleClearForm() {
+    setFormdata((prev) => ({ ...prev, username: "", email: "", password: "" }));
+  }
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+
+    try {
+      setIsLoading(true);
+      // setError(null);
+      const res = await fetch(`http://localhost:5000/api/v1/auth/signup`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+      console.log("data:", data);
+
+      toast(data.message);
+
+      // handleClearForm();
+    } catch (error) {
+      // setError(error.message);
+
+      toast(error.message);
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   return (
     <section className="fixed inset-0 flex justify-center items-center">
       <div className="px-4 w-full">
         <h1 className="text-3xl font-semibold text-center uppercase mb-10 ">Sign Up</h1>
 
-        <form className="flex flex-col gap-y-5 max-w-3xl mx-auto mb-4">
-          <input type="text" placeholder="Username" id="username" className="bg-gray-300 p-3 rounded-lg focus:outline-none" />
+        <form className="flex flex-col gap-y-5 max-w-3xl mx-auto mb-4" onSubmit={handleSubmit}>
+          <input type="text" placeholder="Username" id="username" className="bg-gray-300 p-3 rounded-lg focus:outline-none" value={formData.username} onChange={handleChange} />
 
-          <input type="email" placeholder="Email" id="email" className="bg-gray-300 p-3 rounded-lg focus:outline-none" />
+          <input type="email" placeholder="Email" id="email" className="bg-gray-300 p-3 rounded-lg focus:outline-none" value={formData.email} onChange={handleChange} />
 
-          <input type="password" placeholder="Password" id="password" className="bg-gray-300 p-3 rounded-lg focus:outline-none" />
+          <input type="password" placeholder="Password" id="password" className="bg-gray-300 p-3 rounded-lg focus:outline-none" value={formData.password} onChange={handleChange} />
 
-          <button className="bg-blue-600 px-5 py-3 rounded-lg text-white font-medium uppercase cursor-pointer hover:bg-blue-300 disabled:opacity-80">Sign Up</button>
+          <button disabled={isLoading} className="bg-blue-600 px-5 py-3 rounded-lg text-white font-medium uppercase cursor-pointer hover:bg-blue-300 disabled:opacity-80">
+            {isLoading ? "Creating user..." : "Sign Up"}
+          </button>
 
           <hr className="text-gray-300" />
 

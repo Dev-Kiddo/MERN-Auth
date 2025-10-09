@@ -6,6 +6,7 @@ import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import PageNotFound from "./pages/PageNotFound";
 import Header from "./components/Header";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="sign-up" element={<SignUp />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
+      <ToastContainer />
     </main>
   );
 }
