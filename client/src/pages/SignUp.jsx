@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Button from "../components/Button";
 
 const SignUp = () => {
+  const navigate = useNavigate();
   const [formData, setFormdata] = useState({
     username: "",
     email: "",
@@ -32,12 +33,15 @@ const SignUp = () => {
       // setError(null);
       const res = await fetch(`http://localhost:5000/api/v1/auth/signup`, {
         method: "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
 
       const data = await res.json();
-      console.log("data:", data);
+      // console.log("data:", data);
+
+      navigate("/sign-in");
 
       toast(data.message);
 

@@ -6,7 +6,7 @@ const Header = () => {
     <header className=" bg-gray-300 p-4">
       <div className="flex items-center justify-between mx-auto max-w-6xl">
         <NavLink to="/">
-          <img src="/auth-logo.svg" alt="auth-logo" />
+          <img className="w-10" src="/auth-logo.svg" alt="auth-logo" />
         </NavLink>
 
         <nav className="flex gap-5">

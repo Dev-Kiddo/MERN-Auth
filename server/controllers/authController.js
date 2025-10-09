@@ -67,8 +67,6 @@ export const signIn = async (req, res, next) => {
     // lean(), Documents returned from queries with lean option enabled are plain javascript objects
     const user = await userModel.findOne({ email }).lean();
 
-    console.log("user:", user);
-
     if (!user) {
       // return res.status(500).json({
       //   success: false,
@@ -84,8 +82,6 @@ export const signIn = async (req, res, next) => {
     if (!encryptPassword) return next(customErrHandler(401, "Wrong Credentials, Please try again"));
 
     const { password: hashedpassword, ...userDetails } = user;
-
-    console.log("userDetails:", userDetails);
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "7h" });
 

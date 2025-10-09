@@ -1,10 +1,8 @@
 import React from "react";
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 import { toast } from "react-toastify";
-
-import { useNavigate } from "react-router-dom";
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -31,15 +29,16 @@ const SignIn = () => {
       setIsLoading(true);
       const res = await fetch("http://localhost:5000/api/v1/auth/signin", {
         method: "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
 
       const data = await res.json();
 
-      console.log(data);
+      // console.log(data);
 
-      // navigate("/");
+      navigate("/");
 
       toast(data.message);
     } catch (error) {
