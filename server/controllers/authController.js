@@ -1,7 +1,11 @@
 import userModel from "../models/userModel.js";
 import bcryptjs from "bcryptjs";
+import { customErrHandler } from "../utils/error.js";
 
-export const signUp = async (req, res) => {
+// To use our default err handeling in this controller we need to pass the next function here has a third parameter
+export const signUp = async (req, res, next) => {
+  console.log(next);
+
   const { username, email, password } = req.body;
 
   if (!username || !email || !password) {
@@ -13,12 +17,12 @@ export const signUp = async (req, res) => {
 
   const [existingUser] = await userModel.find({ username, email });
 
-  if (existingUser) {
-    return res.status(500).json({
-      success: false,
-      message: "Entered Details already in use, Please log in or sign up with different credentials",
-    });
-  }
+  // if (existingUser) {
+  //   return res.status(500).json({
+  //     success: false,
+  //     message: "Entered Details already in use, Please log in or sign up with different credentials",
+  //   });
+  // }
 
   try {
     const hashPasssword = await bcryptjs.hash(password, 10);
@@ -31,10 +35,16 @@ export const signUp = async (req, res) => {
       message: "User created successfully",
     });
   } catch (error) {
-    return res.status(404).json({
-      success: false,
-      message: "User creation fail",
-      err: error.message,
-    });
+    // return res.status(404).json({
+    //   success: false,
+    //   message: "User creation fail",
+    //   err: error.message,
+    // });
+
+    // Here we are using our default err handeling middleware
+    return next(error);
+
+    // Default Err handeling with Custom Err
+    // return next(customErrHandler(405, "Somthing happens"));
   }
 };

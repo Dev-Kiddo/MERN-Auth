@@ -20,6 +20,18 @@ app.use(cookieParser());
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/auth", authRouter);
 
+// Error handeling middleware
+app.use((err, req, res, next) => {
+  const statusCode = err.statusCode || 500;
+  const message = err.message || "Internal server error";
+
+  return res.status(statusCode).json({
+    success: false,
+    statusCode,
+    message: err.message || message,
+  });
+});
+
 // console.log("Process:", process.env.MONGO_URL);
 
 const connectDB = async () => {
