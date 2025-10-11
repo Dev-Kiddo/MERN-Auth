@@ -18,8 +18,8 @@ const Header = () => {
               Sign in
             </NavLink>
           </ul>
-
-          {/* <NavLink to="/profile">
+          {/* 
+          <NavLink to="/profile">
             <img className="w-10" src="/default-user-icon.png" alt="" />
           </NavLink> */}
         </nav>

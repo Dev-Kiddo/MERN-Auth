@@ -8,18 +8,16 @@ import PageNotFound from "./pages/PageNotFound";
 import Header from "./components/Header";
 import { ToastContainer } from "react-toastify";
 
-
 function App() {
   return (
     <main className="font-display">
       <Header />
-
       <Routes>
         <Route index element={<Home />} />
-        <Route path="about" element={<About />} />
-        <Route path="profile" element={<Profile />} />
-        <Route path="sign-in" element={<SignIn />} />
-        <Route path="sign-up" element={<SignUp />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/sign-in" element={<SignIn />} />
+        <Route path="/sign-up" element={<SignUp />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
       <ToastContainer />

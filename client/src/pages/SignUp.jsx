@@ -45,7 +45,7 @@ const SignUp = () => {
 
       toast(data.message);
 
-      // handleClearForm();
+      handleClearForm();
     } catch (error) {
       // setError(error.message);
 

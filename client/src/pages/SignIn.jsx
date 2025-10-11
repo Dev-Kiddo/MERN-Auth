@@ -54,7 +54,7 @@ const SignIn = () => {
 
       toast(data.message);
 
-      dispatch(signInSuccess(data.message));
+      dispatch(signInSuccess(data.data));
       // console.log(data);
 
       navigate("/");
