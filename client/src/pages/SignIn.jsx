@@ -1,8 +1,10 @@
 import React from "react";
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-
 import { toast } from "react-toastify";
+
+import { signInSuccess, signInFailure, setLoading } from "../redux/features/userSlice";
+import { useSelector, useDispatch } from "react-redux";
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -11,7 +13,10 @@ const SignIn = () => {
     password: "",
   });
 
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
+  const { isLoading } = useSelector((state) => state.user);
+
+  const dispatch = useDispatch();
 
   function handleChange(e) {
     e.preventDefault();
@@ -26,7 +31,9 @@ const SignIn = () => {
     if (!email || !password) return;
 
     try {
-      setIsLoading(true);
+      // setIsLoading(true);
+      dispatch(setLoading());
+
       const res = await fetch("http://localhost:5000/api/v1/auth/signin", {
         method: "POST",
         credentials: "include",
@@ -36,15 +43,26 @@ const SignIn = () => {
 
       const data = await res.json();
 
+      console.log("data:", data);
+
+      if (!data.success) {
+        dispatch(signInFailure(data.message));
+
+        toast(data.message);
+        return;
+      }
+
+      toast(data.message);
+
+      dispatch(signInSuccess(data.message));
       // console.log(data);
 
       navigate("/");
+    } catch (err) {
+      console.log(err);
 
-      toast(data.message);
-    } catch (error) {
-      toast(error);
-    } finally {
-      setIsLoading(false);
+      toast(err.message);
+      dispatch(signInFailure(err.message));
     }
   }
 
