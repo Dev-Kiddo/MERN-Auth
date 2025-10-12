@@ -16,6 +16,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    photoURL: {
+      type: String,
+      default: `https://i.pravatar.cc/48?u=${Math.trunc(Math.random() * 1000)}`,
+    },
   },
   { timestamps: true }
 );

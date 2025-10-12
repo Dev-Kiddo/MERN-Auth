@@ -96,3 +96,49 @@ export const signIn = async (req, res, next) => {
     next(error);
   }
 };
+
+export const GSignin = async function (req, res, next) {
+  console.log("entering...");
+
+  console.log(req.body);
+  const { username, email, photoURL } = req.body;
+
+  try {
+    const user = await userModel.findOne({ email }).lean();
+
+    console.log("User:", user);
+
+    if (user) {
+      // return next(customErrHandler(401, "User not found..."));
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "7h" });
+      const { password: hashedpassword, ...userDetails } = user;
+      res.cookie("access_token", token, { maxAge: 7000 * 60 * 60, httpOnly: true });
+
+      res.status(201).json({
+        success: true,
+        message: "Log in successfully",
+        data: user,
+      });
+    } else {
+      const generatedPassword = Math.random().toString(36).slice(-8);
+      const hashPasssword = await bcryptjs.hash(generatedPassword, 10);
+
+      const newUser = new userModel({ username: username + Math.trunc(Math.random() * 50), email, password: hashPasssword, photoURL });
+
+      console.log("newUser:", newUser);
+
+      await newUser.save();
+
+      const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: "7h" });
+      res.cookie("access_token", token, { maxAge: 7000 * 60 * 60, httpOnly: true });
+
+      res.status(201).json({
+        success: true,
+        message: "Log in successfully",
+        data: newUser,
+      });
+    }
+  } catch (err) {
+    next(err);
+  }
+};

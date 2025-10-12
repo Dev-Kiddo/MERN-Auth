@@ -41,6 +41,18 @@ const SignIn = () => {
         body: JSON.stringify(formData),
       });
 
+      // const res = await fetch("http://localhost:5000/api/v1/auth/GSignin", {
+      //   method: "POST",
+      // credentials: "include",
+      //   headers: { "Content-Type": "appliation/json" },
+      //   body: JSON.stringify({
+      //     username: result.user.displayName,
+      //     email: result.user.email,
+      //     photoURL: result.user.photoURL,
+      //   }),
+      // });
+
+
       const data = await res.json();
 
       console.log("data:", data);

@@ -22,19 +22,22 @@ const OAuth = () => {
       // console.log("result:", result);
       // console.log("result:", result.user);
 
-      const res = await fetch("http://localhost:5000/api/v1/auth/google", {
+      const payload = {
+        username: result.user.displayName,
+        email: result.user.email,
+        photoURL: result.user.photoURL,
+      };
+
+      const res = await fetch("http://localhost:5000/api/v1/auth/GSignin", {
         method: "POST",
-        headers: { "Content-Type": "appliation/json" },
-        body: JSON.stringify({
-          username: result.user.displayName,
-          email: result.user.email,
-          photoURL: result.user.photoURL,
-        }),
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
       });
 
       const data = await res.json();
 
-      dispatch(signInSuccess(data));
+      dispatch(signInSuccess(data.data));
     } catch (error) {
       console.log("Couldn't Login with google:", error);
     }
