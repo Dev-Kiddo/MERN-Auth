@@ -1,0 +1,56 @@
+import React from "react";
+import Button from "./Button";
+
+import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { app } from "../../firebase.js";
+
+import { signInSuccess } from "../redux/features/userSlice.js";
+import { useDispatch } from "react-redux";
+
+const OAuth = () => {
+  const dispatch = useDispatch();
+  async function handleGoogleLogin() {
+    try {
+      // console.log("continue with google btn clicked");
+      const provider = new GoogleAuthProvider();
+      // console.log("provider:", provider);
+
+      const auth = getAuth(app);
+      // console.log("auth:", auth);
+
+      const result = await signInWithPopup(auth, provider);
+      // console.log("result:", result);
+      // console.log("result:", result.user);
+
+      const res = await fetch("http://localhost:5000/api/v1/auth/google", {
+        method: "POST",
+        headers: { "Content-Type": "appliation/json" },
+        body: JSON.stringify({
+          username: result.user.displayName,
+          email: result.user.email,
+          photoURL: result.user.photoURL,
+        }),
+      });
+
+      const data = await res.json();
+
+      dispatch(signInSuccess(data));
+    } catch (error) {
+      console.log("Couldn't Login with google:", error);
+    }
+  }
+  return (
+    <Button btnColor="text-gray-500" iconUrl="/google.png" hoverBg="bg-gray-800" hoverText="text-white" onclick={handleGoogleLogin}>
+      Continue with google
+    </Button>
+  );
+};
+
+{
+  /* <button className="w-full flex items-center justify-center gap-x-3 mx-auto px-5 py-3 border-1 rounded-lg text-gray-500 font-medium uppercase cursor-pointer hover:bg-gray-800 hover:text-white disabled:opacity-80">
+            <img className="w-5" src="/google.png" />
+            Continue with google
+          </button> */
+}
+
+export default OAuth;

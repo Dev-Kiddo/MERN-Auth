@@ -3,6 +3,8 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Button from "../components/Button";
 
+import OAuth from "../components/OAuth";
+
 const SignUp = () => {
   const navigate = useNavigate();
   const [formData, setFormdata] = useState({
@@ -85,9 +87,11 @@ const SignUp = () => {
             Continue with google
           </button> */}
 
-          <Button btnColor="text-gray-500" iconUrl="/google.png" hoverBg="bg-gray-800" hoverText="text-white">
+          {/* <Button btnColor="text-gray-500" iconUrl="/google.png" hoverBg="bg-gray-800" hoverText="text-white">
             Continue with google
-          </Button>
+          </Button> */}
+
+          <OAuth />
 
           <p className="flex gap-x-2 text-sm justify-center mt-4">
             Have an account?
