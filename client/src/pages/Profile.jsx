@@ -56,9 +56,7 @@ const Profile = () => {
     [image]
   );
 
-  async function handleSubmit() {
-    
-  }
+  async function handleSubmit() {}
 
   return (
     <section className="fixed inset-0 flex justify-center items-center">
@@ -69,7 +67,7 @@ const Profile = () => {
           <input type="file" ref={fileRef} className="hidden" accept="image/*" onChange={handleImageChange} />
           <img
             className="w-18 h-18 rounded-full object-cover hover:border-2 duration-75 mb-4 mx-auto"
-            src={uploadedUrl ? uploadedUrl : currentUser.photoURL}
+            src={uploadedUrl || currentUser.photoURL}
             alt={currentUser._id}
             onClick={() => fileRef.current.click()}
           />
