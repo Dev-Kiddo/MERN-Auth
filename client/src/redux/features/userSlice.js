@@ -22,8 +22,12 @@ const userSlice = createSlice({
       state.error = action.payload;
       state.isLoading = false;
     },
+    onProfileUpdate: (state, action) => {
+      state.currentUser.username = action.payload;
+      state.currentUser.email = action.payload;
+    },
   },
 });
 
-export const { signInSuccess, setLoading, signInFailure } = userSlice.actions;
+export const { signInSuccess, setLoading, signInFailure, onProfileUpdate } = userSlice.actions;
 export default userSlice.reducer;

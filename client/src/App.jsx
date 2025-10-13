@@ -19,7 +19,7 @@ function App() {
         <Route index element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/sign-in" element={<SignIn />} />
-        {/* <Route path="/sign-up" element={<SignUp />} /> */}
+        <Route path="/sign-up" element={<SignUp />} />
         <Route element={<ProtectedRoute currentUser={currentUser} />}>
           <Route path="/profile" element={<Profile />} />
         </Route>
