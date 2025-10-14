@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 
 import { signInSuccess, signInFailure, setLoading } from "../redux/features/userSlice";
 import { useSelector, useDispatch } from "react-redux";
+import OAuth from "../components/OAuth";
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -52,7 +53,6 @@ const SignIn = () => {
       //   }),
       // });
 
-
       const data = await res.json();
 
       console.log("data:", data);
@@ -95,8 +95,9 @@ const SignIn = () => {
 
         <div className="max-w-3xl mx-auto">
           <hr className="text-gray-300 my-4" />
+          <OAuth />
 
-          <p className="flex gap-x-2 text-sm justify-center">
+          <p className="flex gap-x-2 text-sm justify-center mt-4">
             Don't have an account?
             <span>
               <NavLink to="/sign-up" className="text-blue-600">

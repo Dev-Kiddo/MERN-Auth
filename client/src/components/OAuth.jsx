@@ -6,9 +6,12 @@ import { app } from "../../firebase.js";
 
 import { signInSuccess } from "../redux/features/userSlice.js";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const OAuth = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   async function handleGoogleLogin() {
     try {
       // console.log("continue with google btn clicked");
@@ -37,7 +40,11 @@ const OAuth = () => {
 
       const data = await res.json();
 
+      toast(data.message);
+
       dispatch(signInSuccess(data.data));
+
+      navigate("/");
     } catch (error) {
       console.log("Couldn't Login with google:", error);
     }

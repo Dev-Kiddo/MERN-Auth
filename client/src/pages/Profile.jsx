@@ -2,24 +2,41 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import Button from "../components/Button";
 import { useRef } from "react";
+import { useDispatch } from "react-redux";
+import { updateUserSuccess, updateUserStart, updateUserFailure } from "../redux/features/userSlice";
+import { toast } from "react-toastify";
 
 const Profile = () => {
   const { currentUser } = useSelector((state) => state.user);
-  console.log(currentUser);
+  // console.log("currentUser:", currentUser);
 
   const fileRef = useRef(null);
 
+  const dispatch = useDispatch();
+
   const [image, setImage] = useState(null);
-  const [preview, setPreview] = useState("");
+  // const [preview, setPreview] = useState("");
   const [uploading, setUploading] = useState(false);
   const [uploadedUrl, setUploadedUrl] = useState(null);
+  const [formData, setFormData] = useState({
+    username: currentUser.username,
+    email: currentUser.email,
+    password: "",
+    photoURL: "",
+  });
 
   // When user selects file
   const handleImageChange = (e) => {
     console.log("file:", e.target.files);
     const file = e.target.files[0];
     setImage(file);
-    setPreview(URL.createObjectURL(file));
+    // setPreview(URL.createObjectURL(file));
+  };
+
+  const handleChange = function (e) {
+    e.preventDefault();
+
+    setFormData((prev) => ({ ...prev, [e.target.id]: e.target.value }));
   };
 
   // Upload to Cloudinary
@@ -29,7 +46,7 @@ const Profile = () => {
         try {
           if (!image) return console.log("Please select an image first!");
           setUploading(true);
-          console.log("image:", image);
+          // console.log("image:", image);
 
           const formData = new FormData();
           // console.log("formData:", formData);
@@ -46,6 +63,7 @@ const Profile = () => {
           const data = await res.json();
 
           setUploadedUrl(data.secure_url);
+          setFormData((prev) => ({ ...prev, photoURL: data.secure_url }));
           setUploading(false);
         } catch (err) {
           console.log(err);
@@ -56,7 +74,42 @@ const Profile = () => {
     [image]
   );
 
-  async function handleSubmit() {}
+  // useEffect(
+  //   function () {
+  //     console.log("formData:", formData);
+  //     console.log("uploadedUrl:", uploadedUrl);
+  //   },
+  //   [formData, uploadedUrl]
+  // );
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+
+    try {
+      dispatch(updateUserStart());
+      const res = await fetch(`http://localhost:5000/api/v1/users/${currentUser._id}`, {
+        method: "PATCH",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+
+      console.log("ProfileUpdatedData:", data);
+      if (data.success === false) {
+        toast(data.message);
+        return dispatch(updateUserFailure(data.message));
+      }
+
+      dispatch(updateUserSuccess(data.data));
+      toast(data.message);
+    } catch (err) {
+      console.log(err);
+      dispatch(updateUserFailure(err.message));
+      toast(err.message);
+    }
+  }
 
   return (
     <section className="fixed inset-0 flex justify-center items-center">
@@ -75,11 +128,25 @@ const Profile = () => {
           {uploading && <p className="text-blue-600 text-center">Uploading...</p>}
 
           <div className="flex flex-col gap-4">
-            <input type="text" placeholder="Username" id="username" className="bg-gray-300 p-3 rounded-lg focus:outline-none" value={currentUser.username} />
+            <input
+              type="text"
+              placeholder="Username"
+              id="username"
+              className="bg-gray-300 p-3 rounded-lg focus:outline-none"
+              defaultValue={currentUser.username}
+              onChange={handleChange}
+            />
 
-            <input type="email" placeholder="Email" id="email" className="bg-gray-300 p-3 rounded-lg focus:outline-none" value={currentUser.email} />
+            <input type="email" placeholder="Email" id="email" className="bg-gray-300 p-3 rounded-lg focus:outline-none" defaultValue={currentUser.email} onChange={handleChange} />
 
-            <input type="password" placeholder="Password" id="password" className="bg-gray-300 p-3 rounded-lg focus:outline-none" />
+            <input
+              type="password"
+              placeholder="Password"
+              id="password"
+              className="bg-gray-300 p-3 rounded-lg focus:outline-none"
+              defaultValue={currentUser.password}
+              onChange={handleChange}
+            />
 
             <Button btnBg="bg-blue-400"> Update</Button>
 

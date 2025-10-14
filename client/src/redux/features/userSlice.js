@@ -17,7 +17,7 @@ const userSlice = createSlice({
   },
   reducers: {
     signInSuccess: (state, action) => {
-      console.log("state:", state);
+      // console.log("state:", state);
 
       state.currentUser = action.payload;
       state.isLoading = false;
@@ -32,11 +32,22 @@ const userSlice = createSlice({
       state.error = action.payload;
       state.isLoading = false;
     },
-    onSetImage: (state, action) => {
-      state.image = action.payload;
+    updateUserStart: (state) => {
+      state.isLoading = true;
+    },
+    updateUserSuccess: (state, action) => {
+      // console.log("updateUserSuccess:", state, action.payload);
+      state.currentUser = action.payload;
+      state.isLoading = false;
+      state.error = null;
+    },
+    updateUserFailure: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
     },
   },
 });
 
-export const { signInSuccess, setLoading, signInFailure, onSetImage } = userSlice.actions;
+export const { signInSuccess, setLoading, signInFailure, updateUserStart, updateUserSuccess, updateUserFailure } = userSlice.actions;
+
 export default userSlice.reducer;
