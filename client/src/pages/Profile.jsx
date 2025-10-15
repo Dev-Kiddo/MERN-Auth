@@ -3,8 +3,9 @@ import { useSelector } from "react-redux";
 import Button from "../components/Button";
 import { useRef } from "react";
 import { useDispatch } from "react-redux";
-import { updateUserSuccess, updateUserStart, updateUserFailure, deleteUserStart, deleteUserSuccess, deleteUserFailure } from "../redux/features/userSlice";
+import { updateUserSuccess, updateUserStart, updateUserFailure, deleteUserStart, deleteUserSuccess, deleteUserFailure, signOutSuccess } from "../redux/features/userSlice";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
   const { currentUser } = useSelector((state) => state.user);
@@ -13,6 +14,8 @@ const Profile = () => {
   const fileRef = useRef(null);
 
   const dispatch = useDispatch();
+
+  const navigate = useNavigate();
 
   const [image, setImage] = useState(null);
   // const [preview, setPreview] = useState("");
@@ -137,6 +140,30 @@ const Profile = () => {
     }
   }
 
+  async function handleSignOut() {
+    try {
+      const res = await fetch(`http://localhost:5000/api/v1/auth/signout`, {
+        method: "GET",
+        credentials: "include",
+      });
+
+      const data = await res.json();
+
+      if (data.success === false) {
+        toast(data.message);
+        console.log(data.message);
+      }
+
+      toast(data.message);
+
+      dispatch(signOutSuccess());
+      navigate("/");
+    } catch (err) {
+      console.log(err);
+      toast(err.message);
+    }
+  }
+
   return (
     <section className="fixed inset-0 flex justify-center items-center">
       <div className="px-4 w-full">
@@ -180,7 +207,9 @@ const Profile = () => {
               <span className="text-red-500 cursor-pointer" onClick={handleDeleteAccount}>
                 Delete Account
               </span>
-              <span className="text-red-500 cursor-pointer">Sign Out</span>
+              <span className="text-red-500 cursor-pointer" onClick={handleSignOut}>
+                Sign Out
+              </span>
             </div>
           </div>
         </form>

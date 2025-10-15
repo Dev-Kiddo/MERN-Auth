@@ -142,3 +142,13 @@ export const GSignin = async function (req, res, next) {
     next(err);
   }
 };
+
+export const signOut = async function (req, res, next) {
+  
+  res.clearCookie("access_token");
+
+  res.status(200).json({
+    success: true,
+    message: "Signout successfully",
+  });
+};
