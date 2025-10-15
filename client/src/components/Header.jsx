@@ -14,10 +14,6 @@ const Header = () => {
 
         <nav className="flex gap-5">
           <ul className="flex gap-5 items-center">
-            <NavLink className="hover:text-blue-600 font-medium" to="/about">
-              About
-            </NavLink>
-
             {currentUser ? (
               <NavLink to="/profile">
                 <img className="w-8 rounded-full object-cover hover:border-2 duration-75" src={currentUser.photoURL} alt={currentUser.photoURL} />
@@ -28,10 +24,6 @@ const Header = () => {
               </NavLink>
             )}
           </ul>
-          {/* <NavLink to="/profile">
-            <img className="w-8 rounded-full object-cover hover:border-2 duration-75" src={currentUser.photoURL} alt={currentUser.photoURL} />
-          </NavLink> */}
-          <Outlet />
         </nav>
       </div>
     </header>

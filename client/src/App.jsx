@@ -1,6 +1,5 @@
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
-import About from "./pages/About";
 import ProtectedRoute from "./pages/ProtectedRoute";
 import Profile from "./pages/Profile";
 import SignIn from "./pages/SignIn";
@@ -17,7 +16,6 @@ function App() {
       <Header />
       <Routes>
         <Route index element={<Home />} />
-        <Route path="/about" element={<About />} />
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/sign-up" element={<SignUp />} />
         <Route element={<ProtectedRoute currentUser={currentUser} />}>
