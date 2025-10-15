@@ -51,3 +51,25 @@ export const updateUser = async (req, res, next) => {
     return next(err.message);
   }
 };
+
+export const deleteUser = async function (req, res, next) {
+  const { id } = req.body;
+
+  if (id !== req.params.id) {
+    return next(customErrHandler(401, "You can't delete account now, Try again later"));
+  }
+
+  try {
+    await userModel.findByIdAndDelete(req.params.id);
+
+    res.status(200).json({
+      success: true,
+      message: "Account Deleted Successflly...",
+    });
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+
+  res.send("Delete User Successfully");
+};

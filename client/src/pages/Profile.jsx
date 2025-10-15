@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import Button from "../components/Button";
 import { useRef } from "react";
 import { useDispatch } from "react-redux";
-import { updateUserSuccess, updateUserStart, updateUserFailure } from "../redux/features/userSlice";
+import { updateUserSuccess, updateUserStart, updateUserFailure, deleteUserStart, deleteUserSuccess, deleteUserFailure } from "../redux/features/userSlice";
 import { toast } from "react-toastify";
 
 const Profile = () => {
@@ -111,12 +111,38 @@ const Profile = () => {
     }
   }
 
+  async function handleDeleteAccount(e) {
+    e.preventDefault();
+    try {
+      dispatch(deleteUserStart());
+      const res = await fetch(`http://localhost:5000/api/v1/users/${currentUser._id}`, {
+        method: "DELETE",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: currentUser._id }),
+      });
+      const data = await res.json();
+
+      if (data.success === false) {
+        toast(data.message);
+        console.log(data.message);
+      }
+
+      dispatch(deleteUserSuccess());
+      toast(data.message);
+    } catch (err) {
+      console.log(err);
+      toast(err.message);
+      dispatch(deleteUserFailure(err.message));
+    }
+  }
+
   return (
     <section className="fixed inset-0 flex justify-center items-center">
       <div className="px-4 w-full">
         <h1 className="text-3xl font-semibold text-center uppercase mb-10">Profile</h1>
 
-        <form className=" max-w-3xl" onSubmit={handleSubmit}>
+        <form className=" max-w-3xl mx-auto" onSubmit={handleSubmit}>
           <input type="file" ref={fileRef} className="hidden" accept="image/*" onChange={handleImageChange} />
           <img
             className="w-18 h-18 rounded-full object-cover hover:border-2 duration-75 mb-4 mx-auto"
@@ -151,7 +177,9 @@ const Profile = () => {
             <Button btnBg="bg-blue-400"> Update</Button>
 
             <div className="flex justify-between">
-              <span className="text-red-500 cursor-pointer">Delete Account</span>
+              <span className="text-red-500 cursor-pointer" onClick={handleDeleteAccount}>
+                Delete Account
+              </span>
               <span className="text-red-500 cursor-pointer">Sign Out</span>
             </div>
           </div>
