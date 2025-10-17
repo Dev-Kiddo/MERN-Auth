@@ -23,7 +23,7 @@ const userSlice = createSlice({
   },
 });
 
-console.log("userSlice:", userSlice);
+// console.log("userSlice:", userSlice);
 
 export const { signIn, signInSuccess, signInFailure } = userSlice.actions;
 export default userSlice.reducer;

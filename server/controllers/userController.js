@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 import userModel from "../models/userModel.js";
 
 export const getUsers = async (req, res) => {
-  console.log("All Users");
+  // console.log("All Users");
 
   res.status(200).json({
     message: "success",
@@ -11,7 +11,7 @@ export const getUsers = async (req, res) => {
 };
 
 export const updateUser = async (req, res, next) => {
-  console.log("req_User:", req.user);
+  // console.log("req_User:", req.user);
 
   if (req.user.id !== req.params.id) {
     // return res.status(401).json({

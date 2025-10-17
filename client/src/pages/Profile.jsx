@@ -99,7 +99,7 @@ const Profile = () => {
 
       const data = await res.json();
 
-      console.log("ProfileUpdatedData:", data);
+      // console.log("ProfileUpdatedData:", data);
       if (data.success === false) {
         toast(data.message);
         return dispatch(updateUserFailure(data.message));

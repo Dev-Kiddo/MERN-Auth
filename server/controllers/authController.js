@@ -98,15 +98,15 @@ export const signIn = async (req, res, next) => {
 };
 
 export const GSignin = async function (req, res, next) {
-  console.log("entering...");
+  // console.log("entering...");
 
-  console.log(req.body);
+  // console.log(req.body);
   const { username, email, photoURL } = req.body;
 
   try {
     const user = await userModel.findOne({ email }).lean();
 
-    console.log("User:", user);
+    // console.log("User:", user);
 
     if (user) {
       // return next(customErrHandler(401, "User not found..."));
