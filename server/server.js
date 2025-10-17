@@ -13,7 +13,7 @@ const port = process.env.PORT || 4000;
 
 // Middlewares
 app.use(express.json());
-app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+app.use(cors({ origin: "https://mern-auth-9ybt.onrender.com", credentials: true }));
 app.use(cookieParser());
 
 // http://localhost:5000/api/v1/users/
