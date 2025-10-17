@@ -165,7 +165,7 @@ const Profile = () => {
   }
 
   return (
-    <section className="fixed inset-0 flex justify-center items-center">
+    <section className="flex justify-center items-center mt-50">
       <div className="px-4 w-full">
         <h1 className="text-3xl font-semibold text-center uppercase mb-10">Profile</h1>
 
