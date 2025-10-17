@@ -35,7 +35,7 @@ const SignIn = () => {
       // setIsLoading(true);
       dispatch(setLoading());
 
-      const res = await fetch("http://localhost:5000/api/v1/auth/signin", {
+      const res = await fetch("api/v1/auth/signin", {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },

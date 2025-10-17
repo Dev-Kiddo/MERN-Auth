@@ -33,7 +33,7 @@ const SignUp = () => {
     try {
       setIsLoading(true);
       // setError(null);
-      const res = await fetch(`http://localhost:5000/api/v1/auth/signup`, {
+      const res = await fetch(`/api/v1/auth/signup`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
