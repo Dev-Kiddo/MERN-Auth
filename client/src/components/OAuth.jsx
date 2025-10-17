@@ -31,7 +31,7 @@ const OAuth = () => {
         photoURL: result.user.photoURL,
       };
 
-      const res = await fetch("/api/v1/auth/GSignin", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/auth/GSignin`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },

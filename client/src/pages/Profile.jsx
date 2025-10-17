@@ -90,7 +90,7 @@ const Profile = () => {
 
     try {
       dispatch(updateUserStart());
-      const res = await fetch(`/api/v1/users/${currentUser._id}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/users/${currentUser._id}`, {
         method: "PATCH",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -118,7 +118,7 @@ const Profile = () => {
     e.preventDefault();
     try {
       dispatch(deleteUserStart());
-      const res = await fetch(`/api/v1/users/${currentUser._id}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/users/${currentUser._id}`, {
         method: "DELETE",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -142,7 +142,7 @@ const Profile = () => {
 
   async function handleSignOut() {
     try {
-      const res = await fetch(`/api/v1/auth/signout`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/auth/signout`, {
         method: "GET",
         credentials: "include",
       });
